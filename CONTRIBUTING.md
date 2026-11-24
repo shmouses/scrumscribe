@@ -4,6 +4,7 @@ Thanks for helping. This project is small on purpose, so the bar for adding thin
 
 ## Ways to help
 
+- **Fill in the [feedback questionnaire](../../issues/new?template=feedback_survey.yml)** (about 3 minutes). It covers how your team works today and how you would change the workflow.
 - **Try it on a real backlog** and open an issue with what worked and what didn't. This is the most useful thing right now.
 - **Recommend a harness** that does this better, or part of it, with the [recommendation template](../../issues/new?template=harness_recommendation.yml).
 - **Improve a skill or agent prompt.** Keep the plain-English style: short sentences, one idea each.

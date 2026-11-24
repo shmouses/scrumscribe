@@ -1,0 +1,156 @@
+name: Share your feedback (3-minute questionnaire)
+description: Help shape ScrumScribe. Tell us how your team works and how you would change the workflow.
+title: "[Feedback] "
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking a few minutes. ScrumScribe is a simple, generic harness and an open experiment, and your answers decide what changes next.
+
+        **This form is public.** Please don't include confidential information about your employer, clients or projects. General descriptions are perfect.
+
+        Every question is optional except the last confirmation.
+
+  - type: markdown
+    attributes:
+      value: "### About you"
+
+  - type: dropdown
+    id: role
+    attributes:
+      label: Your role
+      options:
+        - Product owner or product manager
+        - Scrum Master
+        - Agile coach or delivery lead
+        - Engineering lead or manager
+        - Software engineer
+        - Data scientist or AI/ML engineer
+        - Designer or researcher
+        - Other
+
+  - type: dropdown
+    id: team_size
+    attributes:
+      label: Size of the team you work with most
+      options:
+        - 1 to 5 people
+        - 6 to 10 people
+        - 11 to 25 people
+        - More than 25 people
+        - Several teams or pods
+
+  - type: input
+    id: domain
+    attributes:
+      label: Your product's general domain
+      description: A broad area is enough, for example healthcare, fintech, e-commerce, internal tools.
+      placeholder: e.g. healthcare
+
+  - type: checkboxes
+    id: tools
+    attributes:
+      label: Tools your team uses for planning
+      options:
+        - label: Jira
+        - label: Confluence
+        - label: Azure DevOps
+        - label: Linear
+        - label: GitHub Issues or Projects
+        - label: Notion
+        - label: Other
+
+  - type: checkboxes
+    id: agents
+    attributes:
+      label: AI coding agents you or your team use
+      options:
+        - label: Claude Code
+        - label: Cursor
+        - label: Codex
+        - label: GitHub Copilot
+        - label: None yet
+        - label: Other
+
+  - type: markdown
+    attributes:
+      value: "### How your team works today"
+
+  - type: textarea
+    id: today
+    attributes:
+      label: How are requirements and tickets prepared in your team today?
+      description: Who writes them, who reviews them, and how much engineers are pulled in.
+
+  - type: checkboxes
+    id: pains
+    attributes:
+      label: Which of these slow your team down most?
+      options:
+        - label: Vague or untestable acceptance criteria
+        - label: Scope that grows after work starts
+        - label: Missing context about the system or domain
+        - label: Engineers and leads pulled into refinement too often
+        - label: Tests and evaluation planned too late
+        - label: Documents out of date or hard to find
+        - label: Work assigned without matching skills or capacity
+
+  - type: markdown
+    attributes:
+      value: "### The ScrumScribe workflow"
+
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Which stage would you change first?
+      description: See the workflow at https://shmouses.github.io/scrumscribe/#stages
+      options:
+        - "1. Discover (reading Jira, Confluence and the code)"
+        - "2. Gap check (what is known, inferred or missing)"
+        - "3. Ask (questions to the product owner)"
+        - "4. Draft (requirements, stories, tests, review)"
+        - "5. Hand off (approvals, owners, posting)"
+        - Setup (charter and team files)
+        - None, it looks right to me
+
+  - type: textarea
+    id: change
+    attributes:
+      label: How would you change it?
+      description: Steps to add, remove or reorder, instructions the agent should follow, or anything that would break in your environment.
+
+  - type: textarea
+    id: missing
+    attributes:
+      label: What is missing for your team?
+      description: Documents, checks, roles, integrations or ways of working we haven't covered.
+
+  - type: textarea
+    id: trust
+    attributes:
+      label: What would you need to see before trusting AI to help draft tickets?
+
+  - type: dropdown
+    id: try
+    attributes:
+      label: Would you try ScrumScribe on a small, non-sensitive feature?
+      options:
+        - Yes
+        - Maybe, with some changes
+        - Not right now
+
+  - type: input
+    id: similar
+    attributes:
+      label: Do you know a similar harness or tool we should learn from?
+      placeholder: Name and link
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before you submit
+      options:
+        - label: I haven't included confidential information about my employer, clients or projects.
+          required: true
+        - label: It's fine to reply to me here with follow-up questions.

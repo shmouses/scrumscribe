@@ -6,26 +6,28 @@
 
 ### Your PO talks. ScrumScribe writes the backlog, with approvals.
 
-**A human-in-the-loop harness that turns a Product Owner conversation into scoped, testable Jira tickets.**
+**A simple, generic harness that turns a Product Owner conversation into scoped, testable Jira tickets, with humans approving every step.**
 
-Helpers read and draft. People approve. Only the orchestrator writes, after both approvals.
+Built on existing open-source harnesses and well-known agile methods. A personal side experiment, shared to learn from the people who do this work every day.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-d97757)](https://code.claude.com/docs/en/plugins)
 [![Status: v0.2 preview](https://img.shields.io/badge/status-v0.2%20preview-orange)](#status-and-limitations)
 [![Validate](https://github.com/shmouses/scrumscribe/actions/workflows/validate.yml/badge.svg)](https://github.com/shmouses/scrumscribe/actions/workflows/validate.yml)
 
-[**Website**](https://shmouses.github.io/scrumscribe/) · [**Quickstart**](#quickstart) · [**Other agents**](#use-it-in-claude-code-cursor-codex-and-other-agents) · [**Worked example**](examples/walkthrough.md) · [**Recommend a harness**](https://github.com/shmouses/scrumscribe/issues/new?template=harness_recommendation.yml)
+[**Website**](https://shmouses.github.io/scrumscribe/) · [**Quickstart**](#quickstart) · [**Other agents**](#use-it-in-claude-code-cursor-codex-and-other-agents) · [**Worked example**](examples/walkthrough.md) · [**Share feedback**](https://github.com/shmouses/scrumscribe/issues/new?template=feedback_survey.yml) · [**Recommend a harness**](https://github.com/shmouses/scrumscribe/issues/new?template=harness_recommendation.yml)
 
 </div>
 
 ---
 
+> **Help shape this experiment.** Have three minutes? [Fill in the feedback questionnaire](https://github.com/shmouses/scrumscribe/issues/new?template=feedback_survey.yml). Tell us how your team prepares tickets today and how you would change this workflow. Every answer is read, and the useful ideas go into the next version with credit.
+
 ## Why
 
 Product Owners know the problem. Engineers know the system. Tickets sit in the gap between them, and that gap is where scope creeps, acceptance criteria go vague, and tests get bolted on at the end.
 
-ScrumScribe sits in that gap. A PO who is not technical can describe what they need in plain English. The harness reads what already exists in Jira, Confluence and the repo, asks only for what is missing, drafts lean stories with testable criteria, and hands a clean package to the Scrum Master (or whichever role your team names). The orchestrator posts nothing until both approvals are recorded, and a hook asks a human before any Atlassian tool that can change data.
+ScrumScribe is a simple, generic harness for that gap. It doesn't invent a new method. It combines ideas from existing open-source harnesses and well-known practices such as Scrum, Shape Up and story splitting (see [Credits](#credits-and-inspiration)). A PO who is not technical can describe what they need in plain English. The harness reads what already exists in Jira, Confluence and the repo, asks only for what is missing, drafts lean stories with testable criteria, and hands a clean package to the Scrum Master (or whichever role your team names). The orchestrator posts nothing until both approvals are recorded, and a hook asks a human before any Atlassian tool that can change data.
 
 ## How the pieces connect
 
@@ -230,10 +232,12 @@ Not affiliated with or endorsed by any of the above, by Atlassian, or by Anthrop
 
 ## Contributing
 
-Ideas, bug reports and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+The quickest way to help is the [feedback questionnaire](https://github.com/shmouses/scrumscribe/issues/new?template=feedback_survey.yml). Ideas, bug reports and pull requests are welcome too. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 **Know a harness that does this better, or part of it?** [Open a recommendation](https://github.com/shmouses/scrumscribe/issues/new?template=harness_recommendation.yml). Comparing notes is half the point of publishing this.
 
 ## License
 
 [MIT](LICENSE) © 2026 Shayan Mousavi M.
+
+ScrumScribe is a personal side project built on my own time. It is not affiliated with or endorsed by any employer.

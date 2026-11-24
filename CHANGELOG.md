@@ -4,6 +4,12 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+### Added
+- Feedback questionnaire (GitHub issue form) linked from the README and the site.
+
+### Changed
+- README and site describe ScrumScribe as a simple, generic harness built on existing open-source harnesses and methods, and note that it is a personal side project.
+
 ## [0.2.0] - 2026-11-23
 
 ### Added
