@@ -54,6 +54,7 @@
   h2 { font-size: clamp(26px, 3.4vw, 34px); margin: 0 0 12px; letter-spacing: -0.01em; }
   .sub { color: var(--quiet); max-width: 720px; margin: 0 0 36px; }
   .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .grid > div { min-width: 0; }
   .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; background: var(--bg); }
   .card h3 { margin: 0 0 8px; font-size: 18px; }
   .card p { margin: 0; color: var(--quiet); font-size: 15.5px; }
@@ -93,6 +94,7 @@
     <nav>
       <a href="#how">How it works</a>
       <a href="#install">Install</a>
+      <a href="#agents">Other agents</a>
       <a href="#safety">Safety</a>
       <a href="#tailor">Tailor</a>
       <a class="gh" href="https://github.com/shmouses/scrumscribe">GitHub</a>
@@ -167,6 +169,37 @@
 <span class="c"># 4. Start a session</span>
 /scrumscribe:po Finance wants to export invoices without asking engineering</pre>
       <p style="margin-top:18px">See the <a href="https://github.com/shmouses/scrumscribe/blob/main/examples/walkthrough.md">worked example</a> for what each stage produces.</p>
+    </div>
+  </section>
+
+  <section id="agents">
+    <div class="wrap">
+      <h2>Works in Claude Code, Cursor, Codex and more</h2>
+      <p class="sub">The skills use the open Agent Skills format, a folder with a <code>SKILL.md</code>, which many coding agents load. Claude Code gets everything. Other tools get the skills and the workflow, with their own approval prompts as the safety gate.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th></th><th>Claude Code</th><th>Cursor</th><th>Codex, Gemini CLI, Copilot, others</th></tr>
+          <tr><td>Skills and workflow</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td>Read-only helper agents</td><td>Yes</td><td>Yes (copy agent files)</td><td>Single-agent mode</td></tr>
+          <tr><td>Approval hook</td><td>Yes</td><td>Use Cursor's approval prompt</td><td>Use the tool's ask-first mode</td></tr>
+          <tr><td>Start a session</td><td><code>/scrumscribe:po</code></td><td><code>/po</code></td><td>Skill picker, e.g. <code>$po</code></td></tr>
+        </table>
+      </div>
+      <div class="grid" style="margin-top:24px; grid-template-columns:1fr">
+        <div><h3 style="margin:0 0 8px;font-size:17px">Cursor</h3>
+<pre>git clone https://github.com/shmouses/scrumscribe.git /tmp/scrumscribe
+mkdir -p .cursor/skills .cursor/agents
+cp -r /tmp/scrumscribe/plugins/scrumscribe/skills/* .cursor/skills/
+cp /tmp/scrumscribe/plugins/scrumscribe/agents/*.md .cursor/agents/</pre></div>
+        <div><h3 style="margin:0 0 8px;font-size:17px">Codex</h3>
+<pre>git clone https://github.com/shmouses/scrumscribe.git /tmp/scrumscribe
+mkdir -p .agents/skills
+cp -r /tmp/scrumscribe/plugins/scrumscribe/skills/* .agents/skills/</pre></div>
+        <div><h3 style="margin:0 0 8px;font-size:17px">Other Agent Skills tools</h3>
+<pre><span class="c"># detects your agents and copies the skills</span>
+npx skills add shmouses/scrumscribe</pre></div>
+      </div>
+      <p style="margin-top:18px; color:var(--quiet); font-size:15px">Tested so far: the full plugin in Claude Code, and the copied file layout for Cursor and Codex. Live sessions in other tools haven't been tested yet. <a href="https://github.com/shmouses/scrumscribe#use-it-in-claude-code-cursor-codex-and-other-agents">Full guide</a>.</p>
     </div>
   </section>
 

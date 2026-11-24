@@ -12,7 +12,9 @@ This skill tailors the harness to one team. It writes two files the team owns:
 - `.scrumscribe/charter.yaml`: how the team works.
 - `.scrumscribe/team.yaml`: who is on the team, their skills, what they own, their capacity.
 
-Templates live in this plugin at `${CLAUDE_PLUGIN_ROOT}/templates/charter.yaml` and `${CLAUDE_PLUGIN_ROOT}/templates/team.yaml`. Copy them, then fill them in.
+Templates live in this plugin at `${CLAUDE_PLUGIN_ROOT}/skills/setup/templates/charter.yaml` and `${CLAUDE_PLUGIN_ROOT}/skills/setup/templates/team.yaml`. Copy them, then fill them in. Ticket templates are in `${CLAUDE_PLUGIN_ROOT}/skills/setup/templates/tickets/`.
+
+**Paths.** `${CLAUDE_PLUGIN_ROOT}` is filled in by Claude Code. If your tool shows it as literal text, read `${CLAUDE_PLUGIN_ROOT}/skills/` as the folder that holds this skill and its sibling skills (for example, from this file, `../agile-intake/references/question-bank.md`).
 
 ## Three ways in. Use whichever the person offers.
 

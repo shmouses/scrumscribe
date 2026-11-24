@@ -1,7 +1,7 @@
 {
   "name": "scrumscribe",
   "displayName": "ScrumScribe",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Your PO talks, ScrumScribe writes the backlog. Human-in-the-loop harness for product teams: PO conversation in, scoped and testable Jira tickets out. Helpers read and draft; only the orchestrator writes, and only after a yes.",
   "author": {
     "name": "Shayan Mousavi",

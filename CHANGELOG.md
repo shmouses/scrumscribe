@@ -4,6 +4,22 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-23
+
+### Added
+- Guide for using ScrumScribe in Cursor, Codex, Gemini CLI, GitHub Copilot and other Agent Skills tools (README and site).
+- Single-agent mode: tools without subagents follow `skills/po/helpers/` one helper at a time.
+- Portable paths: skills explain how to resolve `${CLAUDE_PLUGIN_ROOT}` when a tool doesn't fill it in.
+- Validator checks: helper copies match `agents/`, and every plugin path named in a skill or agent exists.
+
+### Changed
+- Templates moved into skill folders (`skills/setup/templates/`, `skills/po/templates/`) so they travel with the skills.
+
+### Builder self-check
+- `claude plugin validate` passes; `scripts/validate.py` passes (8 checks).
+- Copied the skills into a Cursor-style `.cursor/skills/` folder: every relative path from `po/SKILL.md` resolved.
+- Not yet tested in a live Cursor, Codex or Gemini CLI session.
+
 ## [0.1.0] - 2026-11-23
 
 ### Added

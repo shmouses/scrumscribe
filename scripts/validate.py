@@ -8,6 +8,8 @@ Checks:
   4. No obvious secrets in any tracked text file.
   5. No unreplaced placeholders.
   6. The approval hook asks on Atlassian write tools and not on reads.
+  7. Helper copies in skills/po/helpers/ match agents/ exactly (used by tools without subagents).
+  8. Every ${CLAUDE_PLUGIN_ROOT}/... path named in a skill or agent exists.
 """
 import json, pathlib, re, sys
 
@@ -86,6 +88,22 @@ for name in must_ask:
 for name in must_pass:
     if matcher.search(name):
         errors.append(f"hook asks on read or unrelated tool {name}")
+
+# 7. Helper copies stay in sync with agents/.
+helpers_dir = PLUGIN / "skills" / "po" / "helpers"
+for p in agents:
+    copy = helpers_dir / p.name
+    if not copy.exists() or copy.read_text(encoding="utf-8") != p.read_text(encoding="utf-8"):
+        errors.append(f"skills/po/helpers/{p.name} is missing or differs from agents/{p.name}")
+
+# 8. Plugin paths named in skills and agents exist.
+for p in list((PLUGIN / "skills").rglob("*.md")) + agents:
+    for ref in re.findall(r"\$\{CLAUDE_PLUGIN_ROOT\}/([A-Za-z0-9_./<>-]+)", p.read_text(encoding="utf-8")):
+        ref = ref.rstrip(".")
+        if "<" in ref:
+            continue
+        if not (PLUGIN / ref).exists():
+            errors.append(f"{p.relative_to(ROOT)}: path not found: {ref}")
 
 try:
     import yaml  # optional

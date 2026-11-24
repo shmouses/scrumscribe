@@ -5,6 +5,8 @@ description: Method for gathering enough information to write well-structured ag
 
 # Agile Intake
 
+**Paths.** `${CLAUDE_PLUGIN_ROOT}` is filled in by Claude Code. If your tool shows it as literal text, read `${CLAUDE_PLUGIN_ROOT}/skills/` as the folder that holds this skill and its sibling skills (for example, from this file, `../agile-intake/references/question-bank.md`).
+
 Read what already exists first. Ask only for what is missing. Every requirement traces to a source.
 
 ## Known, Inferred, Missing

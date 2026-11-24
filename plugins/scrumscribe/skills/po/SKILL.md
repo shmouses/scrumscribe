@@ -13,6 +13,10 @@ The PO may not be technical. Speak in plain English, one idea per sentence, no j
 
 Plugin files live under `${CLAUDE_PLUGIN_ROOT}`. Always pass helpers full paths, not relative ones.
 
+**Paths.** `${CLAUDE_PLUGIN_ROOT}` is filled in by Claude Code. If your tool shows it as literal text, read `${CLAUDE_PLUGIN_ROOT}/skills/` as the folder that holds this skill and its sibling skills (for example, from this file, `../agile-intake/references/question-bank.md`).
+
+**No helper agents in your tool?** Some coding agents can't run this plugin's helper agents. Then play each helper yourself, one at a time, following its instructions in `${CLAUDE_PLUGIN_ROOT}/skills/po/helpers/<helper-name>.md`. Keep the same order and the same rule: nothing is written to Jira or Confluence before Stage 5.
+
 ## Before anything else
 
 1. Look for `.scrumscribe/charter.yaml` and `.scrumscribe/team.yaml` in the current project.
@@ -78,7 +82,7 @@ Save outputs under `draft/`. Summarise review findings in `reviews.md`.
 1. **PO approval.** Always required. Show the PO a short summary: epic, story count, test and eval tickets, documents, open risks. Link to the draft files. Ask: approve, change, or stop.
    - Record the answer in `approvals.md`. Changes loop back to Stage 4.
 2. **Owner suggestions.** Delegate to `owner-suggester` with the full path of `team.yaml`. It suggests owners and reviewers and flags capacity problems. It never assigns.
-3. **Second approval.** Fill in `${CLAUDE_PLUGIN_ROOT}/templates/handoff.md` and show it to the second approver. Ask: approve, change owners, or stop. Record it in `approvals.md`. Skip this step only if the charter sets `approvals.second_approver_role: none`, and say that you skipped it.
+3. **Second approval.** Fill in `${CLAUDE_PLUGIN_ROOT}/skills/po/templates/handoff.md` and show it to the second approver. Ask: approve, change owners, or stop. Record it in `approvals.md`. Skip this step only if the charter sets `approvals.second_approver_role: none`, and say that you skipped it.
 4. **Post.** Only now, write to Jira and Confluence:
    - Create the epic, then stories, then test and eval tickets, linked to the epic.
    - Create or update the Confluence pages the charter asks for, and link them from the epic.

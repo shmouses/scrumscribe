@@ -15,7 +15,7 @@ Helpers read and draft. People approve. Only the orchestrator writes, after both
 [![Status: v0.1 preview](https://img.shields.io/badge/status-v0.1%20preview-orange)](#status-and-limitations)
 [![Validate](https://github.com/shmouses/scrumscribe/actions/workflows/validate.yml/badge.svg)](https://github.com/shmouses/scrumscribe/actions/workflows/validate.yml)
 
-[**Website**](https://shmouses.github.io/scrumscribe/) · [**Quickstart**](#quickstart) · [**Worked example**](examples/walkthrough.md) · [**Recommend a harness**](https://github.com/shmouses/scrumscribe/issues/new?template=harness_recommendation.yml)
+[**Website**](https://shmouses.github.io/scrumscribe/) · [**Quickstart**](#quickstart) · [**Other agents**](#use-it-in-claude-code-cursor-codex-and-other-agents) · [**Worked example**](examples/walkthrough.md) · [**Recommend a harness**](https://github.com/shmouses/scrumscribe/issues/new?template=harness_recommendation.yml)
 
 </div>
 
@@ -70,6 +70,64 @@ Without the Atlassian connection, ScrumScribe still runs: it drafts everything i
 
 > **Tip:** add `.scrumscribe/work/` to your project's `.gitignore`. Session work holds internal Jira and Confluence content. The charter and team file can be committed if your team wants.
 
+## Use it in Claude Code, Cursor, Codex and other agents
+
+ScrumScribe is built as a Claude Code plugin, but its skills use the open [Agent Skills](https://agentskills.io) format: a folder with a `SKILL.md` file. Many coding agents load that format, so the core workflow travels. Some parts don't, and the table says which.
+
+| | Claude Code | Cursor | Codex, Gemini CLI, GitHub Copilot and others |
+|---|---|---|---|
+| Skills (`po`, `setup` and the four method skills) | Yes | Yes | Yes |
+| Read-only helper agents | Yes | Yes, copy the agent files | Usually no. The orchestrator plays each helper in turn ("single-agent mode") |
+| Approval hook | Yes | No. Keep Cursor's approval prompt on for Atlassian MCP tools | No. Use the tool's own "ask before running tools" mode |
+| Jira and Confluence | Atlassian MCP | Atlassian MCP in Cursor's MCP settings | The tool's MCP settings |
+| Start a session | `/scrumscribe:po` | `/po` in Agent chat | The tool's skill picker (for example `$po` in Codex) |
+
+The same two files, `.scrumscribe/charter.yaml` and `.scrumscribe/team.yaml`, drive every tool. So do the five stages and the two approvals.
+
+### Claude Code (full support)
+
+Follow the [Quickstart](#quickstart).
+
+### Cursor
+
+Run this in your project folder:
+
+```bash
+git clone https://github.com/shmouses/scrumscribe.git /tmp/scrumscribe
+mkdir -p .cursor/skills .cursor/agents
+cp -r /tmp/scrumscribe/plugins/scrumscribe/skills/* .cursor/skills/
+cp /tmp/scrumscribe/plugins/scrumscribe/agents/*.md .cursor/agents/
+```
+
+Then:
+1. Add the Atlassian MCP server in Cursor's MCP settings.
+2. In Agent chat, run `/setup`, then `/po <what you need>`.
+3. Keep tool approval on for Atlassian tools. Without the Claude Code hook, that prompt is your safety gate.
+
+Cursor's subagents can't load skills directly. The helper files tell them to read the skill's `SKILL.md` instead. If `po` or `setup` clash with skills you already have, rename those two folders.
+
+### Codex
+
+```bash
+git clone https://github.com/shmouses/scrumscribe.git /tmp/scrumscribe
+mkdir -p .agents/skills
+cp -r /tmp/scrumscribe/plugins/scrumscribe/skills/* .agents/skills/
+```
+
+Codex reads `.agents/skills` in your repo, or `~/.agents/skills` for every project. Start with `/skills` or by typing `$po`. Codex's own subagents use a different file format, so ScrumScribe runs in single-agent mode: the orchestrator follows `skills/po/helpers/` one helper at a time. Use an approval mode that asks before running tools.
+
+### Gemini CLI, GitHub Copilot and other Agent Skills tools
+
+The [skills CLI](https://github.com/vercel-labs/skills) detects the coding agents on your machine and copies skills into each one's folder:
+
+```bash
+npx skills add shmouses/scrumscribe
+```
+
+Or copy `plugins/scrumscribe/skills/*` into the folder your tool reads skills from. These tools run ScrumScribe in single-agent mode.
+
+> **Tested so far:** the full plugin in Claude Code (validator and hook tests), and a copied install's file layout for Cursor and Codex. Live sessions in Cursor, Codex and the other tools haven't been tested yet. If you try one, please [open an issue](https://github.com/shmouses/scrumscribe/issues/new?template=bug_report.yml) with what worked.
+
 ## What's inside
 
 | Component | Type | What it does |
@@ -82,7 +140,8 @@ Without the Atlassian connection, ScrumScribe still runs: it drafts everything i
 | `ticket-writing` | Skill | House style: precise wording and a scannable layout. |
 | `intake-analyst`, `scope-guard`, `test-designer`, `red-team-reviewer`, `writer`, `owner-suggester` | Subagents | Read-only helpers. They have no write tools at all. |
 | Approval hook | Hook | Asks a human before any Atlassian MCP tool that is not a known read (get, list, search, lookup, fetch). |
-| `templates/` | Files | Charter, team file, and ticket templates (story, spike, NFR, test, eval, handoff). |
+| `skills/setup/templates/`, `skills/po/templates/` | Files | Charter, team file, ticket templates (story, spike, NFR, test, eval) and the handoff template. Kept inside skill folders so they travel to other agents. |
+| `skills/po/helpers/` | Files | Copies of the helper instructions, for tools that can't run subagents. CI keeps them identical to `agents/`. |
 
 ## Tailor it to any organization
 
@@ -137,6 +196,7 @@ This is a **v0.1 preview**. Be aware of what that means:
 - Posting needs **Jira Cloud and Confluence Cloud** through the official Atlassian connection. Jira Data Center is untested.
 - Atlassian tool names can change. The hook fails closed (unknown tools ask), but check the matcher in `plugins/scrumscribe/hooks/hooks.json` after Atlassian updates.
 - The hook covers Atlassian **MCP** tools only. It does not cover direct REST calls through a shell. Its behaviour in bypass-permissions mode is untested.
+- Outside Claude Code (Cursor, Codex and others) the approval hook doesn't apply, and in single-agent mode one agent plays every helper. The tool's own approval prompts are then the only enforced gate.
 - Approvals are recorded in the conversation. The harness does not verify who is typing; whoever approves is asked to give their name or role.
 - The quality of the questions depends on what Discover can read. Thin Confluence spaces mean more questions.
 
