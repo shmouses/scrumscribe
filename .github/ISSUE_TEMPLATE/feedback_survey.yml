@@ -14,6 +14,25 @@ body:
 
   - type: markdown
     attributes:
+      value: "### Harnesses and workflows you know"
+
+  - type: textarea
+    id: harnesses
+    attributes:
+      label: Do you know a good harness or tool for this?
+      description: Names and links, one per line. Anything that helps turn product needs into clear requirements and tickets is welcome.
+      placeholder: |
+        Tool name - https://...
+
+  - type: textarea
+    id: own_workflow
+    attributes:
+      label: Do you have your own workflow for this? We'd love to learn from it.
+      description: A link to a repo, article, template or doc, or a short description of how it works.
+      placeholder: https://...
+
+  - type: markdown
+    attributes:
       value: "### About you"
 
   - type: dropdown
@@ -139,12 +158,6 @@ body:
         - "Yes"
         - Maybe, with some changes
         - Not right now
-
-  - type: input
-    id: similar
-    attributes:
-      label: Do you know a similar harness or tool we should learn from?
-      placeholder: Name and link
 
   - type: checkboxes
     id: confirm
