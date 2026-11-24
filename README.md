@@ -12,7 +12,7 @@ Helpers read and draft. People approve. Only the orchestrator writes, after both
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-d97757)](https://code.claude.com/docs/en/plugins)
-[![Status: v0.1 preview](https://img.shields.io/badge/status-v0.1%20preview-orange)](#status-and-limitations)
+[![Status: v0.2 preview](https://img.shields.io/badge/status-v0.2%20preview-orange)](#status-and-limitations)
 [![Validate](https://github.com/shmouses/scrumscribe/actions/workflows/validate.yml/badge.svg)](https://github.com/shmouses/scrumscribe/actions/workflows/validate.yml)
 
 [**Website**](https://shmouses.github.io/scrumscribe/) · [**Quickstart**](#quickstart) · [**Other agents**](#use-it-in-claude-code-cursor-codex-and-other-agents) · [**Worked example**](examples/walkthrough.md) · [**Recommend a harness**](https://github.com/shmouses/scrumscribe/issues/new?template=harness_recommendation.yml)
@@ -190,7 +190,7 @@ Some guarantees are enforced by how the parts are wired. Others are rules the or
 
 ## Status and limitations
 
-This is a **v0.1 preview**. Be aware of what that means:
+This is a **v0.2 preview**. Be aware of what that means:
 
 - The plugin passes `claude plugin validate`, and the approval hook was tested against sample Atlassian tool names. It has **not yet been run on a real team's backlog**. Feedback from real use is the next milestone.
 - Posting needs **Jira Cloud and Confluence Cloud** through the official Atlassian connection. Jira Data Center is untested.
