@@ -136,7 +136,7 @@ body:
     attributes:
       label: Would you try ScrumScribe on a small, non-sensitive feature?
       options:
-        - Yes
+        - "Yes"
         - Maybe, with some changes
         - Not right now
 
