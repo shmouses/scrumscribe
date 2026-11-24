@@ -1,0 +1,17 @@
+{
+  "description": "ScrumScribe approval guard: any Atlassian MCP tool that is not a known read asks the human first.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__.*[Aa]tlassian.*__(?!(get|list|search|lookup|query|fetch|discover$|executeRead$|atlassianUserInfo$)).*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"ScrumScribe: this Atlassian tool can change Jira or Confluence. Approve only if both approvals are recorded in approvals.md.\"}}'",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

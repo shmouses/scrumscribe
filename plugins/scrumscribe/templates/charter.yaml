@@ -1,0 +1,43 @@
+# ScrumScribe team charter
+# Copy to .scrumscribe/charter.yaml in your project, or run /scrumscribe:setup.
+# Never put passwords, API keys or tokens in this file.
+
+team: null                      # TODO: team or product name
+method: scrum                   # scrum | kanban | shape-up | custom
+sprint_length_days: 10          # null for Kanban
+hierarchy: [epic, story, subtask]
+appetite_default: one-sprint    # used when the PO gives no time budget; Kanban teams: e.g. two-weeks
+
+acceptance_criteria_style: given-when-then   # given-when-then | checklist | both
+writing: [plain-technical-english, adhd-friendly-layout]
+glossary: {}                    # term: definition. The writer uses only these terms.
+
+definition_of_ready:
+  - Outcome line written from the user's point of view
+  - Acceptance criteria are testable
+  - Dependencies named
+  - Fits in one sprint
+definition_of_done: null        # TODO: link the team's Confluence page or list items
+
+docs_wanted: [prd, fr-nfr-spec, test-plan]   # ids from document-catalogue.md
+
+required_areas:                 # question-bank area ids that must be Known before drafting
+  - goal
+  - users
+  - scope
+  - appetite
+  - behaviour
+  - ready-done
+
+limits:
+  stories_per_epic: 8
+  acceptance_criteria_per_story: 5
+
+approvals:
+  # The PO approval is always required and cannot be turned off.
+  second_approver_role: scrum-master   # scrum-master | qa-lead | tech-lead | delivery-lead | none
+
+where:
+  jira_project: null            # TODO: e.g. PROJ
+  confluence_space: null        # TODO: e.g. PROD
+  repos: []                     # e.g. ["org/service-a"]

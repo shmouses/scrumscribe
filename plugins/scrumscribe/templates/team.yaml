@@ -1,0 +1,29 @@
+# ScrumScribe team file
+# Copy to .scrumscribe/team.yaml in your project, or run /scrumscribe:setup.
+# Minimal work data only: a name or handle, role, skills, ownership, capacity.
+# No contact details, health, performance ratings or other personal data. Handles are fine.
+
+skill_levels:
+  1: can contribute with support
+  2: works independently
+  3: can lead and review
+
+pods:
+  - name: Example Pod               # replace
+    owns: [example-service]         # systems or areas this pod is accountable for
+    members:
+      - name: person-a              # replace with a name or handle
+        role: backend developer
+        skills: {backend: 3, data: 2, testing: 2}
+        accountable_for: [example-service-api]
+        capacity_pct: 80
+      - name: person-b
+        role: QA engineer
+        skills: {testing: 3, automation: 2}
+        accountable_for: [test-strategy]
+        capacity_pct: 100
+
+reviewers:
+  adr: tech-lead
+  test-plan: qa-lead
+  eval-plan: ml-lead

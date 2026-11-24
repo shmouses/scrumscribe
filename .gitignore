@@ -1,0 +1,10 @@
+# Local ScrumScribe working data (may contain internal project details)
+.scrumscribe/
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+# Python
+__pycache__/
+*.pyc

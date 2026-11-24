@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScrumScribe: your PO talks, ScrumScribe writes the backlog</title>
+<meta name="description" content="A human-in-the-loop Claude Code harness that turns a Product Owner conversation into scoped, testable Jira tickets. Helpers draft, people approve, only the orchestrator writes.">
+<meta property="og:title" content="ScrumScribe">
+<meta property="og:description" content="PO conversation in, scoped and testable Jira tickets out. Helpers draft, people approve, only the orchestrator writes.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://shmouses.github.io/scrumscribe/assets/social-preview.png">
+<meta property="og:url" content="https://shmouses.github.io/scrumscribe/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<style>
+  :root {
+    --bg: #ffffff; --bg-soft: #f6f8fa; --ink: #1f2328; --quiet: #57606a; --line: #d0d7de;
+    --accent: #2f6feb; --accent-soft: #ddf4ff; --code-bg: #0d1117; --code-ink: #e6edf3;
+    --radius: 12px; --max: 1080px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0d1117; --bg-soft: #161b22; --ink: #e6edf3; --quiet: #9da7b3; --line: #30363d;
+            --accent: #4493f8; --accent-soft: #10243e; --code-bg: #010409; }
+    .diagram { background: #ffffff; }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+  header.nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent);
+               backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); }
+  .brand img { width: 28px; height: 28px; border-radius: 7px; }
+  .nav nav a { color: var(--quiet); margin-left: 22px; font-size: 15px; }
+  .nav nav a.gh { color: var(--ink); font-weight: 600; }
+  @media (max-width: 720px) { .nav nav a:not(.gh) { display: none; } }
+
+  .hero { padding: 88px 24px 56px; text-align: center; }
+  .pill { display: inline-block; font-size: 13px; font-weight: 600; color: var(--accent);
+          background: var(--accent-soft); padding: 4px 12px; border-radius: 999px; margin-bottom: 20px; }
+  h1 { font-size: clamp(34px, 5.2vw, 56px); line-height: 1.1; margin: 0 auto 18px; max-width: 840px; letter-spacing: -0.02em; }
+  .lead { font-size: clamp(18px, 2.2vw, 21px); color: var(--quiet); max-width: 720px; margin: 0 auto 32px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 600; font-size: 16px; }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn.ghost { border: 1px solid var(--line); color: var(--ink); }
+  .btn:hover { text-decoration: none; filter: brightness(1.05); }
+
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: clamp(26px, 3.4vw, 34px); margin: 0 0 12px; letter-spacing: -0.01em; }
+  .sub { color: var(--quiet); max-width: 720px; margin: 0 0 36px; }
+  .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; background: var(--bg); }
+  .card h3 { margin: 0 0 8px; font-size: 18px; }
+  .card p { margin: 0; color: var(--quiet); font-size: 15.5px; }
+  .num { display: inline-flex; width: 28px; height: 28px; border-radius: 8px; align-items: center; justify-content: center;
+         background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 14px; margin-bottom: 12px; }
+  .diagram { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; background: var(--bg); }
+  .diagram img { display: block; width: 100%; height: auto; }
+  .enlarge { display: none; margin: 8px 0 0; font-size: 14px; text-align: center; }
+  @media (max-width: 720px) { .diagram { overflow-x: auto; } .diagram img { min-width: 640px; } .enlarge { display: block; } }
+  .stages { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 32px; }
+  .flow { max-width: 780px; margin: 0 auto; }
+  .two { display: grid; gap: 32px; grid-template-columns: 1fr 1fr; align-items: start; }
+  @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+  pre { background: var(--code-bg); color: var(--code-ink); padding: 18px 20px; border-radius: var(--radius);
+        overflow-x: auto; font: 14px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; margin: 0; }
+  pre .c { color: #8b949e; }
+  ul.checks { list-style: none; padding: 0; margin: 0; }
+  ul.checks li { padding: 10px 0 10px 32px; position: relative; border-bottom: 1px solid var(--line); }
+  ul.checks li:last-child { border-bottom: 0; }
+  ul.checks li::before { content: ""; position: absolute; left: 4px; top: 16px; width: 14px; height: 8px;
+                         border-left: 2.5px solid var(--accent); border-bottom: 2.5px solid var(--accent); transform: rotate(-45deg); }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--quiet); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+  .note { background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 22px; color: var(--quiet); font-size: 15.5px; }
+  .note strong { color: var(--ink); }
+  footer { border-top: 1px solid var(--line); padding: 40px 0 56px; color: var(--quiet); font-size: 14.5px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="assets/icon.png" alt="">ScrumScribe</a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#install">Install</a>
+      <a href="#safety">Safety</a>
+      <a href="#tailor">Tailor</a>
+      <a class="gh" href="https://github.com/shmouses/scrumscribe">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero wrap">
+    <span class="pill">Open source · Claude Code plugin · v0.1 preview</span>
+    <h1>Your PO talks. ScrumScribe writes the backlog.</h1>
+    <p class="lead">From a Product Owner's words to scoped, testable Jira tickets. ScrumScribe reads what already exists in Jira, Confluence and the repo, asks only for what is missing, and splits the work into lean, testable stories. It posts only after the PO and Scrum Master approve, and a hook asks a human before any change to Jira or Confluence.</p>
+    <div class="cta">
+      <a class="btn primary" href="#install">Get started</a>
+      <a class="btn ghost" href="https://github.com/shmouses/scrumscribe">View on GitHub</a>
+    </div>
+  </div>
+
+  <section id="why">
+    <div class="wrap">
+      <h2>Built for the gap between product and engineering</h2>
+      <p class="sub">Most ticket problems start before the sprint: vague criteria, scope that keeps growing, and tests added at the end. These are the four things the harness does about it.</p>
+      <div class="grid">
+        <div class="card"><h3>Reads before it asks</h3><p>Pulls context from Jira, Confluence and the repo first. The PO only answers what the sources don't, five questions at a time.</p></div>
+        <div class="card"><h3>Keeps scope lean</h3><p>Sets a time budget first, splits by user value with SPIDR, and lists every cut so nothing disappears quietly.</p></div>
+        <div class="card"><h3>Designs tests up front</h3><p>Acceptance criteria come as concrete examples. Integration, eval and UAT tickets appear only when a trigger applies.</p></div>
+        <div class="card"><h3>Humans stay in charge</h3><p>Helpers are read-only. The PO approves scope, the Scrum Master approves owners and posting, and a hook asks before any Atlassian change.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <h2>How the pieces connect</h2>
+      <p class="sub">One orchestrator talks to people. Six helper agents read and draft. Only the orchestrator can write to Jira or Confluence, and only after a yes.</p>
+      <div class="diagram"><a href="assets/system-map.svg" title="Open full size"><img src="assets/system-map.svg" alt="System map: Product Owner, Scrum Master and delivery team; the orchestrator; six read-only helpers; context sources; Jira and Confluence written only after approval" loading="lazy"></a><p class="enlarge"><a href="assets/system-map.svg">Open full size</a></p></div>
+    </div>
+  </section>
+
+  <section id="stages">
+    <div class="wrap">
+      <div>
+        <h2>Five stages, two human gates</h2>
+        <p class="sub">The harness loops on its own until the gaps are closed and the scope fits the appetite. Then two people must approve before anything is posted.</p>
+        <div class="grid stages">
+          <div class="card"><span class="num">1</span><h3>Discover</h3><p>Reads Jira, Confluence and the repo. Every fact gets a source link.</p></div>
+          <div class="card"><span class="num">2</span><h3>Gap check</h3><p>Marks each area of the question bank Known, Inferred or Missing.</p></div>
+          <div class="card"><span class="num">3</span><h3>Ask</h3><p>At most five questions per round, multiple choice where possible, each saying why it matters.</p></div>
+          <div class="card"><span class="num">4</span><h3>Draft</h3><p>Requirements, lean stories, test and eval tickets, a red-team review and a house-style rewrite.</p></div>
+          <div class="card"><span class="num">5</span><h3>Hand off</h3><p>PO approval, owner suggestions from the team file, second approval (Scrum Master by default), then posting with links back.</p></div>
+        </div>
+      </div>
+      <div class="diagram flow"><a href="assets/workflow.svg" title="Open full size"><img src="assets/workflow.svg" alt="Flowchart of the five stages with loops for questions and scope, and two approval gates" loading="lazy"></a><p class="enlarge"><a href="assets/workflow.svg">Open full size</a></p></div>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <h2>Install and run</h2>
+      <p class="sub">You need Claude Code, opened in your project folder. Reading and posting need an Atlassian MCP connection for Jira Cloud and Confluence Cloud. Without it, everything is drafted locally for you to paste.</p>
+<pre><span class="c"># 1. Add the marketplace and install the plugin (inside Claude Code)</span>
+/plugin marketplace add shmouses/scrumscribe
+/plugin install scrumscribe@scrumscribe
+
+<span class="c"># 2. Connect Jira and Confluence, then sign in when prompted (or via /mcp)</span>
+/plugin install atlassian@claude-plugins-official
+/reload-plugins
+
+<span class="c"># 3. Tailor it to your team</span>
+/scrumscribe:setup we run two-week Scrum, epics and stories, we want a PRD and ADRs
+
+<span class="c"># 4. Start a session</span>
+/scrumscribe:po Finance wants to export invoices without asking engineering</pre>
+      <p style="margin-top:18px">See the <a href="https://github.com/shmouses/scrumscribe/blob/main/examples/walkthrough.md">worked example</a> for what each stage produces.</p>
+    </div>
+  </section>
+
+  <section id="safety">
+    <div class="wrap two">
+      <div>
+        <h2>Safety you can check</h2>
+        <p class="sub">Two guarantees are enforced by how the parts are wired. The rest are rules the orchestrator follows, and every step leaves a record you can read.</p>
+      </div>
+      <ul class="checks">
+        <li><strong>Enforced: helpers cannot write.</strong> Their tools are limited to reading files and loading skills. No MCP tools, no shell. CI checks this.</li>
+        <li><strong>Enforced: a hook asks first.</strong> Any Atlassian tool that is not a known read asks a human before it runs. Unknown new tools ask too.</li>
+        <li><strong>Followed: two recorded approvals.</strong> The PO and the Scrum Master (or the role your team names) each sign off, in their own words, in <code>approvals.md</code>.</li>
+        <li><strong>Followed: suggest, never assign.</strong> Owner suggestions come from the team file. The Scrum Master decides.</li>
+        <li><strong>Minimal data.</strong> Credentials stay in Claude Code. The team file holds a name or handle, skills, ownership and capacity.</li>
+        <li><strong>A full audit trail.</strong> Each session leaves plain-text records you can read, diff and keep.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="tailor">
+    <div class="wrap two">
+      <div>
+        <h2>Tailor it to any organization</h2>
+        <p class="sub">Two small files, owned by the team, decide the method, ticket levels, documents, writing style and limits. Or describe how you work in plain English and approve the result.</p>
+        <div class="table-wrap">
+          <table>
+            <tr><th>File</th><th>Holds</th></tr>
+            <tr><td><code>charter.yaml</code></td><td>Method, sprint length, ticket levels, Definition of Ready and Done, documents wanted, limits, who gives the second approval</td></tr>
+            <tr><td><code>team.yaml</code></td><td>Pods, what each owns, people's work skills (1 to 3), accountability, capacity</td></tr>
+          </table>
+        </div>
+      </div>
+<pre><span class="c"># .scrumscribe/charter.yaml (excerpt)</span>
+method: scrum
+sprint_length_days: 10
+hierarchy: [epic, story, subtask]
+docs_wanted: [prd, fr-nfr-spec, adr, test-plan]
+limits:
+  stories_per_epic: 8
+  acceptance_criteria_per_story: 5
+approvals:
+  second_approver_role: scrum-master</pre>
+    </div>
+  </section>
+
+  <section id="credits">
+    <div class="wrap">
+      <h2>Standing on good ideas</h2>
+      <p class="sub">ScrumScribe borrows from published methods and community tools. It doesn't bundle their code.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Source</th><th>What it contributes</th></tr>
+          <tr><td><a href="https://basecamp.com/shapeup">Shape Up</a></td><td>Appetite, rabbit holes, no-gos</td></tr>
+          <tr><td><a href="https://www.mountaingoatsoftware.com/blog/five-simple-but-powerful-ways-to-split-user-stories">SPIDR</a> (Mike Cohn)</td><td>Story-splitting prompts</td></tr>
+          <tr><td><a href="https://scrumguides.org/scrum-guide.html">Scrum Guide 2020</a></td><td>Product Goal, Sprint Goal, Definition of Done</td></tr>
+          <tr><td><a href="https://www.iso.org/standard/78176.html">ISO/IEC 25010:2023</a></td><td>Quality characteristics for non-functional requirements</td></tr>
+          <tr><td><a href="https://github.com/DietrichGebert/ponytail">Ponytail</a></td><td>The "lazy senior" principle, applied to tickets</td></tr>
+          <tr><td><a href="https://github.com/ayghri/i-have-adhd">i-have-adhd</a>, <a href="https://github.com/AminBlg/SimpleEnglish">SimpleEnglish</a> and ASD-STE100 skills</td><td>Answer-first layout and precise wording</td></tr>
+          <tr><td><a href="https://github.com/cursor/plugins">Thermos</a> (Cursor plugin)</td><td>The idea of a strict review step for high-risk tickets</td></tr>
+          <tr><td><a href="https://github.com/atlassian/atlassian-mcp-server">Atlassian MCP server</a> and <a href="https://github.com/nandiewg-crypto/agent-po">agent-po</a></td><td>Show the breakdown first; helpers prepare, the orchestrator publishes</td></tr>
+          <tr><td><a href="https://github.com/bmad-code-org/BMAD-METHOD">BMAD Method</a></td><td>Agile agent roles; optional Test Architect companion</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:18px; color:var(--quiet); font-size:14.5px">Not affiliated with or endorsed by any of the above, Atlassian or Anthropic. ASD-STE100 is a standard of ASD; this project is not certified by ASD. <a href="https://github.com/shmouses/scrumscribe#credits-and-inspiration">Full credits</a>.</p>
+    </div>
+  </section>
+
+  <section id="status">
+    <div class="wrap">
+      <div class="note">
+        <strong>Status: v0.1 preview.</strong> The plugin passes Claude Code's validator, the approval hook is tested against current Atlassian tool names, and an independent review found no open must-fix items. It hasn't been run on a real team's backlog yet. If you try it, or know a harness that does this better, <a href="https://github.com/shmouses/scrumscribe/issues/new?template=harness_recommendation.yml">please tell us</a>.
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>ScrumScribe · MIT License · © 2026 Shayan Mousavi M.</span>
+    <span><a href="https://github.com/shmouses/scrumscribe">GitHub</a> · <a href="https://github.com/shmouses/scrumscribe/blob/main/CONTRIBUTING.md">Contribute</a> · <a href="https://github.com/shmouses/scrumscribe/issues/new?template=harness_recommendation.yml">Recommend a harness</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

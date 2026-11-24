@@ -1,0 +1,33 @@
+name: Recommend a harness or tool
+description: Know a harness, plugin or method that does this better, or part of it? Tell us.
+title: "[Recommendation] "
+labels: ["recommendation"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Name and link
+      placeholder: "e.g. Some Harness — https://github.com/org/repo"
+    validations:
+      required: true
+  - type: dropdown
+    id: covers
+    attributes:
+      label: Which part does it cover?
+      multiple: true
+      options:
+        - Talking to a non-technical PO
+        - Reading Jira, Confluence or the repo for context
+        - Splitting requirements into tickets
+        - Test or evaluation design
+        - Team, skills and ownership awareness
+        - Scrum Master handoff
+        - Posting to Jira
+        - Something else
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it's worth a look
+      description: What does it do well? Have you used it?
+    validations:
+      required: true

@@ -1,0 +1,19 @@
+{
+  "name": "scrumscribe",
+  "owner": {
+    "name": "Shayan Mousavi",
+    "url": "https://github.com/shmouses"
+  },
+  "metadata": {
+    "description": "ScrumScribe: a human-in-the-loop harness that turns a Product Owner conversation into scoped, testable Jira tickets."
+  },
+  "plugins": [
+    {
+      "name": "scrumscribe",
+      "source": "./plugins/scrumscribe",
+      "description": "Talk to a PO, fill requirement gaps from Jira, Confluence and the repo, split work into lean tickets, and post them to Jira only after the PO and Scrum Master say yes.",
+      "category": "productivity",
+      "tags": ["agile", "scrum", "jira", "confluence", "requirements", "product-owner", "human-in-the-loop"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+name: Bug report
+description: Something didn't work as described.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Remove any internal project details before posting.
+  - type: input
+    id: versions
+    attributes:
+      label: Claude Code version and plugin version
+      placeholder: "e.g. Claude Code 2.1.331, scrumscribe 0.1.0"
+  - type: dropdown
+    id: write
+    attributes:
+      label: Did anything get written to Jira or Confluence without approval?
+      options: ["No", "Yes (please also report privately via Security)"]
